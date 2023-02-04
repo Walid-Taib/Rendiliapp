@@ -4,6 +4,7 @@ const bodyParser=require('body-parser');
 companies.use(bodyParser.json());
 
 const Company=require('../models/company');
+const { application } = require('express');
 companies.route('/')
 .get((req,res,next)=>{
   Company.find()
@@ -73,5 +74,6 @@ companies.route('/:companyId')
   },(err)=>next(err))
   .catch((err)=>next(err))
 })
+
 
 module.exports=companies;
