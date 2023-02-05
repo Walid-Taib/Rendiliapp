@@ -17,6 +17,7 @@ search.route('/')
   if(req.body.typeOjob){
     query.typeOjob=req.body.typeOjob
   }
+  query = { ...query, position: { $regex: req.body.position, $options: "i" } };
 
   Company.aggregate([{$match:query}])
   .then((resp)=>{
@@ -25,5 +26,11 @@ search.route('/')
     res.json(resp);
   })
 })
+search.route('/keyword')
+.post((req,res,next)=>{
+  Company.find()
+})
 
 module.exports=search;
+
+
