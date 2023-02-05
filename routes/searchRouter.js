@@ -1,27 +1,29 @@
-const express =require('express');
-const bodyParser=require('body-parser');
+const express=require('express');
 const search=express.Router();
+const bodyParser=require('body-parser');
+search.use(bodyParser.json());
+const Company=require('../models/company');
 
-search.use(bodyParser.json())
 
-const Company=require('../models/company')
 search.route('/')
 .post((req,res,next)=>{
-  Company.aggregate([{$match:{
-    $or:[
-        {city:req.body.city},
-        
-    ],
-    $and:[{
-      name:req.body.name
-    }]
-    
-}}])
-  .then((company)=>{
+  query={}
+  if(req.body.city){
+    query.city=req.body.city
+  }
+  if(req.body.position){
+    query.position=req.body.position
+  }
+  if(req.body.typeOjob){
+    query.typeOjob=req.body.typeOjob
+  }
+
+  Company.aggregate([{$match:query}])
+  .then((resp)=>{
     res.statusCode=200;
-    res.setHeader('Content-Type','application/json');
-    res.json(company)
-  },(err)=>next(err))
-  .catch((err)=>next(err))
+    res.setHeader("Content-Type","application/json");
+    res.json(resp);
+  })
 })
+
 module.exports=search;

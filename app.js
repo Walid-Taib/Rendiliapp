@@ -13,16 +13,23 @@ mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 const connect =mongoose.connect("mongodb://localhost:27017/rendili", {useNewUrlParser: true, useUnifiedTopology: true});
-
+var cors=require('cors')
 connect.then((db) => {
     console.log("Connected correctly to server");
 }, (err) => { console.log(err); });
 
 // view engine setup
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-
 app.use(logger('dev'));
+app.options('*', cors());
+ app.use((req,res,next)=>{
+  res.setHeader('Access-Control-Allow-Origin','*');
+  res.setHeader('Access-Control-Allow-Methods','GET,POST,PUT,PATCH,DELETE');
+  res.setHeader('Access-Control-Allow-Methods','Content-Type','Authorization');
+  next(); 
+})
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());

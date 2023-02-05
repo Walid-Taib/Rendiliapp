@@ -1,13 +1,11 @@
 const express=require('express');
 const companies=express.Router();
 const bodyParser=require('body-parser');
-companies.use(bodyParser.json());
-
+var cors=require('cors')
 const Company=require('../models/company');
-const { application } = require('express');
 companies.route('/')
-.get((req,res,next)=>{
-  Company.find()
+.get(cors(),(req,res,next)=>{
+  Company.find({})
   .then((companies)=>{
     res.statusCode=200;
     res.setHeader('Content-Type','application/json');
